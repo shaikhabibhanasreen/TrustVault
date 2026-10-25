@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | TrustVault</title>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 420px;
+        padding: 35px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+        margin: 0;
+        color: #1d4ed8;
+        text-align: center;
+    }
+
+    h2 {
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    .subtitle {
+        color: #64748b;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        margin: 18px 0 7px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    input:focus {
+        outline: 2px solid #93c5fd;
+        border-color: #2563eb;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 25px;
+        padding: 13px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    .error {
+        margin-top: 15px;
+        color: #dc2626;
+        font-size: 14px;
+    }
+
+    .security-note {
+        margin-top: 20px;
+        color: #64748b;
+        text-align: center;
+        font-size: 13px;
+    }
+</style>
+```
+
+</head>
+
+<body>
+    <div class="login-container">
+        <h1>TrustVault</h1>
+        <p class="subtitle">Secure Document Sharing Platform</p>
+
+
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Sign in to access your documents.</p>
+
+    {% if form.errors %}
+        <div class="error">
+            Invalid username or password. Please try again.
+        </div>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p class="error">
+                Your account cannot access that page.
+            </p>
+        {% else %}
+            <p class="subtitle">
+                Please sign in to continue.
+            </p>
+        {% endif %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="id_username">Username</label>
+        <input
+            type="text"
+            name="username"
+            id="id_username"
+            autocomplete="username"
+            required
+            autofocus
+        >
+
+        <label for="id_password">Password</label>
+        <input
+            type="password"
+            name="password"
+            id="id_password"
+            autocomplete="current-password"
+            required
+        >
+
+        <input type="hidden" name="next" value="{{ next }}">
+
+        <button type="submit">Sign In</button>
+    </form>
+
+    <p class="security-note">
+        Your documents are accessible only with appropriate permissions.
+    </p>
+</div>
+```
+
+</body>
+</html>

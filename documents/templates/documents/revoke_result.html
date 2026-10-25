@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Permission Status - TrustVault</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px 20px;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: white;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #243b64;
+    }
+
+    .message {
+        padding: 15px;
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+
+    .document-title {
+        color: #555;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 12px 20px;
+        background-color: #243b64;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        background-color: #172947;
+    }
+</style>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>TrustVault</h1>
+
+```
+    <h2>Permission Status</h2>
+
+    <p class="document-title">
+        Document: <strong>{{ document.title }}</strong>
+    </p>
+
+    <div class="message">
+        {{ message }}
+    </div>
+
+    <a href="{% url 'document_list' %}">
+        Back to My Documents
+    </a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | TrustVault</title>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .register-container {
+        width: 100%;
+        max-width: 460px;
+        padding: 35px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+        margin: 0;
+        color: #1d4ed8;
+        text-align: center;
+    }
+
+    h2 {
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    .subtitle {
+        color: #64748b;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        margin: 16px 0 7px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    input:focus {
+        outline: 2px solid #93c5fd;
+        border-color: #2563eb;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 25px;
+        padding: 13px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    .errors {
+        margin-top: 15px;
+        color: #dc2626;
+        font-size: 14px;
+    }
+
+    .security-note {
+        margin-top: 20px;
+        color: #64748b;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .login-link {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .login-link a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    .helptext {
+        display: block;
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    ul.errorlist {
+        color: #dc2626;
+        font-size: 13px;
+        padding-left: 20px;
+    }
+</style>
+
+</head>
+
+<body>
+    <div class="register-container">
+        <h1>TrustVault</h1>
+
+
+    <p class="subtitle">Secure Document Sharing Platform</p>
+
+    <h2>Create Account</h2>
+
+    <p class="subtitle">Register to get started with TrustVault.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="errors">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+
+        <label for="{{ form.email.id_for_label }}">Email Address</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+
+        <label for="{{ form.password1.id_for_label }}">Password</label>
+        {{ form.password1 }}
+        {{ form.password1.errors }}
+
+        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+        {{ form.password2 }}
+        {{ form.password2.errors }}
+
+        {% if form.password1.help_text %}
+            <div class="helptext">{{ form.password1.help_text|safe }}</div>
+        {% endif %}
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <p class="security-note">
+        New accounts receive the Viewer role by default.
+    </p>
+
+    <p class="login-link">
+        Already have an account?
+        <a href="{% url 'login' %}">Sign In</a>
+    </p>
+</div>
+
+</body>
+</html>

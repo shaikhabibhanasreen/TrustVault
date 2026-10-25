@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Document | TrustVault</title>
+
+```
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 30px 15px;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+        margin-top: 0;
+        color: #1d4ed8;
+    }
+
+    p {
+        color: #64748b;
+    }
+
+    .navigation {
+        margin: 15px 0 25px;
+    }
+
+    .nav-button {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #e0e7ff;
+        color: #1d4ed8;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
+    .nav-button:hover {
+        background: #c7d2fe;
+    }
+
+    label {
+        display: block;
+        margin-top: 18px;
+        margin-bottom: 7px;
+        font-weight: bold;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 11px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    input[type="file"] {
+        background: #f8fafc;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 24px;
+        padding: 13px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    .error {
+        color: #dc2626;
+        font-size: 14px;
+    }
+
+    .help {
+        font-size: 13px;
+        color: #64748b;
+    }
+</style>
+```
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>TrustVault</h1>
+
+```
+    <div class="navigation">
+        <a href="{% url 'document_list' %}" class="nav-button">
+            My Documents
+        </a>
+    </div>
+
+    <h2>Upload a Document</h2>
+    <p>Securely upload and organize your documents.</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <label for="{{ form.title.id_for_label }}">
+            Document Title
+        </label>
+        {{ form.title }}
+        <div class="error">{{ form.title.errors }}</div>
+
+        <label for="{{ form.description.id_for_label }}">
+            Description
+        </label>
+        {{ form.description }}
+        <div class="error">{{ form.description.errors }}</div>
+
+        <label for="{{ form.category.id_for_label }}">
+            Category
+        </label>
+        {{ form.category }}
+        <div class="error">{{ form.category.errors }}</div>
+
+        <label for="{{ form.file.id_for_label }}">
+            Select File
+        </label>
+        {{ form.file }}
+
+        <p class="help">
+            Allowed: PDF, DOC, DOCX, PNG, JPG, JPEG.
+            Maximum size: 10 MB.
+        </p>
+
+        <div class="error">{{ form.file.errors }}</div>
+
+        <button type="submit">Upload Securely</button>
+    </form>
+</div>
+```
+
+</body>
+</html>

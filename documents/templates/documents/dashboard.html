@@ -1,0 +1,226 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | TrustVault</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 15px;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #1d4ed8;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .logout-button {
+            background: #dc2626;
+        }
+
+        .logout-button:hover {
+            background: #b91c1c;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+        }
+
+        .welcome h2 {
+            margin-top: 0;
+            color: #1d4ed8;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            padding: 22px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        .number {
+            margin: 10px 0 0;
+            font-size: 32px;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+
+        .section {
+            margin-top: 30px;
+        }
+
+        .activity {
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .activity:last-child {
+            border-bottom: none;
+        }
+
+        .metadata {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .empty {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            color: #64748b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>TrustVault Dashboard</h1>
+
+        <div class="actions">
+            <a class="button" href="{% url 'document_list' %}">
+                My Documents
+            </a>
+
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="button logout-button">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="welcome">
+        <h2>Welcome, {{ request.user.username }}!</h2>
+        <p>
+            Monitor your documents, sharing permissions, and security activity.
+        </p>
+        <p>
+            <strong>Role:</strong> {{ request.user.get_role_display }}
+        </p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Accessible Documents</h3>
+            <p class="number">{{ total_documents }}</p>
+        </div>
+
+        {% if total_users != None %}
+        <div class="card">
+            <h3>Registered Users</h3>
+            <p class="number">{{ total_users }}</p>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <h3>Sharing Permissions</h3>
+            <p class="number">{{ total_permissions }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Access Denied Events</h3>
+            <p class="number">{{ access_denied_count }}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Recent Audit Activity</h2>
+
+        {% for log in recent_activity %}
+            <div class="activity">
+                <strong>{{ log.get_action_display }}</strong>
+
+                {% if log.document %}
+                    — {{ log.document.title }}
+                {% endif %}
+
+                <p class="metadata">
+                    User:
+                    {% if log.actor %}
+                        {{ log.actor.username }}
+                    {% else %}
+                        Unknown user
+                    {% endif %}
+                    |
+                    Time: {{ log.timestamp|date:"d M Y, H:i" }}
+                </p>
+            </div>
+        {% empty %}
+            <div class="empty">
+                No audit activity available.
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>

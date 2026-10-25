@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Documents | TrustVault</title>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 30px 15px;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    h1 {
+        color: #1d4ed8;
+        margin: 0;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 9px 14px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .button:hover {
+        background: #1d4ed8;
+    }
+
+    .logout-button,
+    .danger-button {
+        background: #dc2626;
+    }
+
+    .logout-button:hover,
+    .danger-button:hover {
+        background: #b91c1c;
+    }
+
+    .share-button {
+        background: #059669;
+    }
+
+    .share-button:hover {
+        background: #047857;
+    }
+
+    .header-actions,
+    .document-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .user-info {
+        margin-top: 25px;
+        padding: 18px 20px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+    }
+
+    .user-info h3 {
+        margin-top: 0;
+        color: #1d4ed8;
+    }
+
+    .user-info p {
+        margin: 8px 0;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        background: #dbeafe;
+        color: #1d4ed8;
+        border-radius: 15px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .document {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+    }
+
+    .document h3 {
+        margin-top: 0;
+        color: #0f172a;
+    }
+
+    .metadata {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .shared-users {
+        margin-top: 18px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 8px;
+    }
+
+    .shared-users h4 {
+        margin-top: 0;
+    }
+
+    .permission-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 0;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .empty {
+        margin-top: 25px;
+        padding: 25px;
+        text-align: center;
+        background: #f8fafc;
+        border-radius: 8px;
+    }
+
+    .section-description {
+        color: #64748b;
+    }
+</style>
+```
+
+</head>
+
+<body>
+    <div class="container">
+
+```
+    <div class="header">
+        <h1>TrustVault</h1>
+
+        <div class="header-actions">
+            {% if request.user.role == "OWNER" or request.user.role == "ADMIN" %}
+                <a class="button" href="{% url 'upload_document' %}">
+                    Upload Document
+                </a>
+            {% endif %}
+
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="button logout-button">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="user-info">
+        <h3>Account Information</h3>
+
+        <p>
+            <strong>Username:</strong>
+            {{ request.user.username }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ request.user.email|default:"Not provided" }}
+        </p>
+
+        <p>
+            <strong>Your Role:</strong>
+            <span class="role-badge">
+                {{ request.user.get_role_display }}
+            </span>
+        </p>
+    </div>
+
+    <h2>My Documents</h2>
+
+<p class="section-description">
+    View and search documents you own or that have been shared with you.
+</p>
+
+<form method="GET" action="{% url 'document_list' %}"
+      style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+
+    <input
+        type="search"
+        name="q"
+        value="{{ search_query }}"
+        placeholder="Search by title, description, or category..."
+        aria-label="Search documents"
+        style="flex: 1; min-width: 220px; padding: 12px;
+               border: 1px solid #cbd5e1; border-radius: 6px;"
+    >
+
+    <button type="submit" class="button">
+        Search
+    </button>
+
+    {% if search_query %}
+        <a class="button" href="{% url 'document_list' %}">
+            Clear
+        </a>
+    {% endif %}
+
+</form>
+
+    {% if documents %}
+        {% for document in documents %}
+            <div class="document">
+
+                <h3>{{ document.title }}</h3>
+
+                {% if document.description %}
+                    <p>{{ document.description }}</p>
+                {% endif %}
+
+                <p class="metadata">
+                    Category:
+                    {{ document.category|default:"Uncategorized" }}
+                </p>
+
+                <p class="metadata">
+                    Owner: {{ document.owner.username }}
+                </p>
+
+                <p class="metadata">
+                    Uploaded:
+                    {{ document.uploaded_at|date:"d M Y, H:i" }}
+                </p>
+
+                <div class="document-actions">
+                    <a
+                        class="button"
+                        href="{% url 'view_document' document.id %}"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        View Document
+                    </a>
+
+                    {% if document.owner_id == request.user.id or request.user.role == "ADMIN" %}
+                        <a
+                            class="button share-button"
+                            href="{% url 'share_document' document.id %}"
+                        >
+                            Share
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if document.owner_id == request.user.id or request.user.role == "ADMIN" %}
+                    <div class="shared-users">
+                        <h4>Manage Access</h4>
+
+                        {% for permission in document.permissions.all %}
+                            <div class="permission-row">
+                                <div>
+                                    <strong>{{ permission.user.username }}</strong>
+                                    <span class="metadata">
+                                        — {{ permission.get_permission_type_display|default:permission.permission_type }}
+                                    </span>
+                                </div>
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'revoke_permission' document.id permission.user.id %}"
+                                    onsubmit="return confirm('Are you sure you want to revoke this user’s access?');"
+                                >
+                                    {% csrf_token %}
+                                    <button
+                                        type="submit"
+                                        class="button danger-button"
+                                    >
+                                        Revoke Access
+                                    </button>
+                                </form>
+                            </div>
+                        {% empty %}
+                            <p class="metadata">
+                                This document has not been shared with anyone.
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty">
+            <h3>No documents found</h3>
+            <p>Upload a document to get started with TrustVault.</p>
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
