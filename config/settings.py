@@ -35,10 +35,11 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1"
-).split(",")
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "trustvault-1-bt8l.onrender.com",
+]
 
 
 # Application definition
